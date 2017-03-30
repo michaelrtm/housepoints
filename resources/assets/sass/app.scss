@@ -1,0 +1,134 @@
+@import "reset";
+
+// Fonts
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700);	
+@import url(https://unpkg.com/animate.css@3.5.1/animate.min.css);
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+/*@import "node_modules/vue2-animate/dist/vue2-animate.min";*/
+
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+#app{
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	display: flex;
+	box-orient: horizontal;
+}
+.nav{
+	background-color: #406d41;
+	flex: 1;
+	width:33%;
+	color:#ffffff;
+	padding-left: 20px;
+}
+.nav h1 {
+	font-weight: 800;
+}
+.nav ul {
+	list-style: none;
+}
+.nav .main-buttons{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.nav .main-button{
+	background-color: #ffffff;
+	color: #222222;
+	align-items: center;
+	border-radius: 15px;
+	margin: 0 20px 20px 0;
+	padding: 35px 40px;
+	position: relative;
+	border-bottom: 5px solid #cccccc;
+	cursor: pointer;
+}
+.nav .main-button:active
+{
+	transform: translate(0px,5px);
+    -webkit-transform: translate(0px,5px);
+	border-bottom: 1px solid;
+}
+.button-animate
+{
+	transition: all 0.15s;
+	-webkit-transition: all 0.15s;
+}
+.content{
+	flex: 1;
+	flex-grow: 2;
+	padding-left: 20px;
+}
+.content h1 {
+	font-weight: 800;
+}
+.main {
+	display: flex;
+	flex-direction: column;
+}
+.square-buttons{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between
+}
+.btn-square{
+	flex: 0 1 calc(50% - 10px);
+	padding: 35px;
+	text-align: center;
+	display: inline-block;
+	border:1px solid;
+	margin: 5px;
+	color: #ffffff;
+	font-weight: 800;
+	font-size: 2em;
+	&.wide{
+		flex: 5 0 calc(100% - 10px);
+	}
+	&.third{
+		flex: 5 0 calc(33% - 10px);	
+	}
+	&.grey{
+		background-color: #acacac;
+	}
+}
+.yellow, .hookey{
+	color: #fff;
+	background-color: $hookey;
+}
+.green, .walling{
+	color: #fff;
+	background-color: $walling;
+}
+.blue, .bell{
+	color: #fff;
+	background-color: $bell;
+}
+.red, .jamieson{
+	color: #fff;
+	background-color: $jamieson;
+}
+.student-list {
+	font-size: 1.3em;
+	li {
+		padding:20px;
+		cursor: pointer;
+		margin: 20px;
+	}
+}
+.btn.cancel{
+	float: right;
+	margin-top: 25px;
+}
