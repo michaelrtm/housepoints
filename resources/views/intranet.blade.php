@@ -16,7 +16,7 @@
 		<h1>MEPS INTRANET</h1>
 		<ul class="main-buttons">
 			<div v-for="link in links">
-				<link-button :link="link"></link-button>	
+				<link-button :link="link"></link-button>
 			</div>
 		</ul>
 	</div> --}}
@@ -45,12 +45,14 @@
 								<div class="square-buttons">
 									<button class="btn-square grey wide" @click="findStudent = true"><i class="fa fa-user"></i> Find Student</button>
 								</div>
-								<manage-scores v-bind:active-house="activeHouse"
-											   @scored="scoreAdded" 
-											   @house-set="activeHouseSet"
-											   >
+
+								<manage-scores :houses="houses"
+									v-bind:active-house="activeHouse"
+									@scored="scoreAdded"
+									@house-set="activeHouseSet"
+								>
 								</manage-scores>
-								
+
 							</div>
 
 							<div class="find-student" key="find-student" v-else>
@@ -58,12 +60,30 @@
 											  :students="students"></find-student>
 							</div>
 						</transition>
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th></th>
+									<th style="width:20%" v-for="score in lastWeekScores">@{{ score.name }}</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>This Week</td>
+									<td style="width:20%" v-for="score in scores">@{{ score.score }}</td>
+								</tr>
+								<tr>
+									<td>Last Week</td>
+									<td style="width:20%" v-for="score in lastWeekScores">@{{ score.score }}</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 					<div class="col-md-6">
-						<house-points v-bind:scores="scores.data"></house-points>
+						<house-points v-bind:scores="scores" :height="288"></house-points>
 							<div class="square-buttons">
-								<button class="btn-square grey half" @click="viewWeeklyScores()"><i class="fa fa-trophy"></i> Week</button>
-								<button class="btn-square grey half" @click="viewYearlyScores()"><i class="fa fa-trophy"></i> Year</button>
+								<button class="btn-square grey half" @click="viewWeeklyScores()" v-bind:class="{ active: week }"><i class="fa fa-trophy"></i> Week</button>
+								<button class="btn-square grey half" @click="viewYearlyScores()" v-bind:class="{ active: year }"><i class="fa fa-trophy"></i> Year</button>
 							</div>
 					</div>
 				</div>

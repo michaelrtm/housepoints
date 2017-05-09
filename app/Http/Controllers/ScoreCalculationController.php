@@ -17,11 +17,16 @@ class ScoreCalculationController extends ApiController
         $endScope = Carbon::now();
 
         $houses = House::all();
-        $since = Input::get('since');
+        $scope = Input::get('scope');
 
-        if($since == 'year'){
+        if($scope == 'year'){
             $startScope = Carbon::now()->startOfYear();
             $endScope = Carbon::now();
+        }
+
+        if($scope == 'last-week'){
+            $startScope = Carbon::now()->subWeek()->startOfWeek();
+            $endScope = Carbon::now()->subWeek()->endOfWeek();
         }
 
         $housesWithScores = $houses->map(function ($house) use ($startScope, $endScope) {

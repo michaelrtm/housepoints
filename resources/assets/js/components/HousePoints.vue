@@ -1,47 +1,43 @@
 <script>
-import { Bar } from 'vue-chartjs';
+import { Bar } from 'vue-chartjs'
 
 export default Bar.extend({
-    props: ['scores'],
-    
+    props: ['scores','toggle'],
+
     mounted () {
-        console.log(this.scores)
-        this.sortScores()
-        this.render()
-    },
 
-    /*watch: {
-      'sortedScores': {
-        handler: function() {
-          this.render()
-        },
-        deep: true
-      }
     },
-
-    computed: {
-      sortedScores() {
-        return [this.scores.red, this.scores.green, this.scores.yellow, this.scores.blue];
-      }
-    },*/
 
     data() {
       return {
-        displayScores: [],
         displayLabels: [],
+        displayScores: [],
         displayColors: []
-      };
+      }
+    },
+
+    watch: {
+      scores() {
+        this.buildScores()
+      }
     },
 
     methods: {
-      sortScores() {
-        console.log("sorting scores")
-        console.log(this.scores)
-        $.each(this.scores, function(object) {
-            $.each(object, function(key, value) {
-                console.log( key + ": " + value );
-            });
+      buildScores() {
+        if(this._chart){
+          this._chart.destroy()
+        }
+        this.displayLabels = []
+        this.displayColors = []
+        this.displayScores = []
+
+        var self = this
+        _.forOwn(this.scores, function (object, index){
+          self.displayLabels.push(object.name)
+          self.displayColors.push(object.hex)
+          self.displayScores.push(object.score)
         });
+        this.render();
       },
 
       render() {
@@ -49,26 +45,28 @@ export default Bar.extend({
           labels: this.displayLabels,
           datasets: [
             {
-              backgroundColor: '#f87979',
-              data: this.displayScores,
+              label: 'House Points',
               backgroundColor: this.displayColors,
-              borderWidth: 2,
+              data: this.displayScores
             }
-          ]},
-          {
-            responsive: true,
-            maintainAspectRatio: false,
-            legend: {
-              display: false
+          ]
+        },{
+          legend: {
+            display: false
+          },
+          tooltips: {
+            enabled: true
+          },
+          scales: {
+            gridLines: {
+              display: true
             },
-            scales: {
-              xAxes: [{
-                barPercentage: .9,
-                columnPercentage: 1,
-              }]
-            }
+            xAxes: [{
+              categoryPercentage: 1,
+              barPercentage: .9
+            }]
           }
-      );
+        });
       }
     }
 

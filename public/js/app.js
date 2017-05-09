@@ -38471,6 +38471,7 @@ var app = new Vue({
     mounted: function mounted() {
         this.getHouses();
         this.getScores();
+        this.getStudents();
     },
 
 
@@ -38484,10 +38485,18 @@ var app = new Vue({
 
     data: function data() {
         return {
+            displayLabels: [],
+            displayScores: [],
+            displayColors: [],
             activeHouse: null,
             findStudent: null,
+            viewTable: false,
+            students: null,
             houses: {},
-            scores: {}
+            scores: null,
+            lastWeekScores: null,
+            week: true,
+            year: false
         };
     },
 
@@ -38496,36 +38505,53 @@ var app = new Vue({
         getScores: function getScores() {
             var _this = this;
 
+            var self = this;
             axios.get('/api/calculate').then(function (response) {
-                _this.scores = response.data;
+                _this.scores = response.data.data;
+            });
+            axios.get('/api/calculate?scope=last-week').then(function (response) {
+                _this.lastWeekScores = response.data.data;
             });
         },
         getHouses: function getHouses() {
             var _this2 = this;
 
             axios.get('/api/houses').then(function (response) {
-                _this2.houses = response.data;
+                _this2.houses = response.data.data;
+            });
+        },
+        getStudents: function getStudents() {
+            var _this3 = this;
+
+            axios.get('/api/students').then(function (response) {
+                _this3.students = response.data.data;
             });
         },
         scoreAdded: function scoreAdded(score) {
-            this.scores[this.activeHouse] += score;
+            this.getScores();
+            this.year = false;
+            this.week = true;
         },
         activeHouseSet: function activeHouseSet(house) {
             this.findStudent = false;
-            this.activeHouse = house;
+            this.activeHouse = this.houses[house - 1];
         },
         viewYearlyScores: function viewYearlyScores() {
-            var _this3 = this;
+            var _this4 = this;
 
+            this.year = true;
+            this.week = false;
             axios.get('/api/calculate?scope=year').then(function (response) {
-                _this3.scores = response.data;
+                _this4.scores = response.data.data;
             });
         },
         viewWeeklyScores: function viewWeeklyScores() {
-            var _this4 = this;
+            var _this5 = this;
 
+            this.year = false;
+            this.week = true;
             axios.get('/api/calculate').then(function (response) {
-                _this4.scores = response.data;
+                _this5.scores = response.data.data;
             });
         },
         clearAll: function clearAll() {
@@ -39455,6 +39481,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = {
 	props: ['students'],
@@ -39467,7 +39498,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 	computed: {
-		computedList: function computedList() {
+		queryList: function queryList() {
 			var vm = this;
 			return this.students.filter(function (item) {
 				return item.name.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1;
@@ -39487,74 +39518,70 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_chartjs__ = __webpack_require__(217);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_chartjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_chartjs__);
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = __WEBPACK_IMPORTED_MODULE_0_vue_chartjs__["Bar"].extend({
-  props: ['scores'],
+  props: ['scores', 'toggle'],
 
-  mounted: function mounted() {
-    console.log(this.scores);
-    this.sortScores();
-    this.render();
-  },
-
-
-  /*watch: {
-    'sortedScores': {
-      handler: function() {
-        this.render()
-      },
-      deep: true
-    }
-  },
-    computed: {
-    sortedScores() {
-      return [this.scores.red, this.scores.green, this.scores.yellow, this.scores.blue];
-    }
-  },*/
-
+  mounted: function mounted() {},
   data: function data() {
     return {
-      displayScores: [],
       displayLabels: [],
+      displayScores: [],
       displayColors: []
     };
   },
 
 
+  watch: {
+    scores: function scores() {
+      this.buildScores();
+    }
+  },
+
   methods: {
-    sortScores: function sortScores() {
-      console.log("sorting scores");
-      console.log(this.scores);
-      $.each(this.scores, function (object) {
-        $.each(object, function (key, value) {
-          console.log(key + ": " + value);
-        });
+    buildScores: function buildScores() {
+      if (this._chart) {
+        this._chart.destroy();
+      }
+      this.displayLabels = [];
+      this.displayColors = [];
+      this.displayScores = [];
+
+      var self = this;
+      _.forOwn(this.scores, function (object, index) {
+        self.displayLabels.push(object.name);
+        self.displayColors.push(object.hex);
+        self.displayScores.push(object.score);
       });
+      this.render();
     },
     render: function render() {
-      var _ref;
-
       this.renderChart({
         labels: this.displayLabels,
-        datasets: [(_ref = {
-          backgroundColor: '#f87979',
+        datasets: [{
+          label: 'House Points',
+          backgroundColor: this.displayColors,
           data: this.displayScores
-        }, _defineProperty(_ref, 'backgroundColor', this.displayColors), _defineProperty(_ref, 'borderWidth', 2), _ref)] }, {
-        responsive: true,
-        maintainAspectRatio: false,
+        }]
+      }, {
         legend: {
           display: false
         },
+        tooltips: {
+          enabled: true
+        },
         scales: {
+          gridLines: {
+            display: true
+          },
           xAxes: [{
-            barPercentage: .9,
-            columnPercentage: 1
+            categoryPercentage: 1,
+            barPercentage: .9
           }]
         }
       });
@@ -39562,7 +39589,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   }
 
 });
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(61)))
 
 /***/ }),
 /* 242 */
@@ -39602,71 +39628,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = {
-	props: ['activeHouse'],
+	props: ['houses', 'activeHouse'],
 
 	data: function data() {
 		return {
-			//
+			setScores: [5, 10, 20, 50]
 		};
 	},
 
@@ -39679,7 +39647,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	methods: {
 		setActiveHouse: function setActiveHouse(house) {
-			this.$emit('house-set', house);
+			this.$emit('house-set', house.id);
 			this.currentlyActiveHouse = house;
 		},
 		clearActiveHouse: function clearActiveHouse() {
@@ -78086,13 +78054,13 @@ var Component = __webpack_require__(17)(
   /* script */
   __webpack_require__(238),
   /* template */
-  __webpack_require__(440),
+  __webpack_require__(441),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Michael\\Code\\meps\\resources\\assets\\js\\components\\Button.vue"
+Component.options.__file = "/Users/mooroolbarkeastprimaryschool/Code/housepoints/resources/assets/js/components/Button.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Button.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -78103,9 +78071,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-a330b73e", Component.options)
+    hotAPI.createRecord("data-v-7d5f65c6", Component.options)
   } else {
-    hotAPI.reload("data-v-a330b73e", Component.options)
+    hotAPI.reload("data-v-7d5f65c6", Component.options)
   }
 })()}
 
@@ -78120,13 +78088,13 @@ var Component = __webpack_require__(17)(
   /* script */
   __webpack_require__(239),
   /* template */
-  __webpack_require__(439),
+  __webpack_require__(440),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Michael\\Code\\meps\\resources\\assets\\js\\components\\Example.vue"
+Component.options.__file = "/Users/mooroolbarkeastprimaryschool/Code/housepoints/resources/assets/js/components/Example.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Example.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -78137,9 +78105,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-163dbe4b", Component.options)
+    hotAPI.createRecord("data-v-606a2d0f", Component.options)
   } else {
-    hotAPI.reload("data-v-163dbe4b", Component.options)
+    hotAPI.reload("data-v-606a2d0f", Component.options)
   }
 })()}
 
@@ -78154,13 +78122,13 @@ var Component = __webpack_require__(17)(
   /* script */
   __webpack_require__(240),
   /* template */
-  __webpack_require__(441),
+  __webpack_require__(438),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Michael\\Code\\meps\\resources\\assets\\js\\components\\FindStudent.vue"
+Component.options.__file = "/Users/mooroolbarkeastprimaryschool/Code/housepoints/resources/assets/js/components/FindStudent.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FindStudent.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -78171,9 +78139,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-fb26b2ba", Component.options)
+    hotAPI.createRecord("data-v-2107d932", Component.options)
   } else {
-    hotAPI.reload("data-v-fb26b2ba", Component.options)
+    hotAPI.reload("data-v-2107d932", Component.options)
   }
 })()}
 
@@ -78194,7 +78162,7 @@ var Component = __webpack_require__(17)(
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Michael\\Code\\meps\\resources\\assets\\js\\components\\HousePoints.vue"
+Component.options.__file = "/Users/mooroolbarkeastprimaryschool/Code/housepoints/resources/assets/js/components/HousePoints.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
@@ -78204,9 +78172,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-0c271404", Component.options)
+    hotAPI.createRecord("data-v-793680c8", Component.options)
   } else {
-    hotAPI.reload("data-v-0c271404", Component.options)
+    hotAPI.reload("data-v-793680c8", Component.options)
   }
 })()}
 
@@ -78221,13 +78189,13 @@ var Component = __webpack_require__(17)(
   /* script */
   __webpack_require__(242),
   /* template */
-  __webpack_require__(438),
+  __webpack_require__(439),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\Users\\Michael\\Code\\meps\\resources\\assets\\js\\components\\ManageScores.vue"
+Component.options.__file = "/Users/mooroolbarkeastprimaryschool/Code/housepoints/resources/assets/js/components/ManageScores.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ManageScores.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -78238,9 +78206,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-02ad73d5", Component.options)
+    hotAPI.createRecord("data-v-378b9f91", Component.options)
   } else {
-    hotAPI.reload("data-v-02ad73d5", Component.options)
+    hotAPI.reload("data-v-378b9f91", Component.options)
   }
 })()}
 
@@ -78249,170 +78217,6 @@ module.exports = Component.exports
 
 /***/ }),
 /* 438 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('div', {
-    staticClass: "square-buttons"
-  }, [_c('transition', {
-    attrs: {
-      "enter-active-class": "animated bounceIn",
-      "leave-active-class": "animated bounceOut",
-      "mode": "out-in"
-    }
-  }, [(!_vm.activeHouse) ? _c('button', {
-    key: "bell",
-    staticClass: "btn-square bell",
-    on: {
-      "click": function($event) {
-        _vm.setActiveHouse('blue')
-      }
-    }
-  }, [_vm._v("\n\t\t\t\t\tBell\n\t\t\t\t")]) : _c('button', {
-    key: "plus5",
-    staticClass: "btn-square",
-    class: _vm.activeHouse,
-    on: {
-      "click": function($event) {
-        _vm.addScore(5)
-      }
-    }
-  }, [_vm._v("\n\t\t\t\t\t+5\n\t\t\t\t")])]), _vm._v(" "), _c('transition', {
-    attrs: {
-      "enter-active-class": "animated bounceIn",
-      "leave-active-class": "animated bounceOut",
-      "mode": "out-in"
-    }
-  }, [(!_vm.activeHouse) ? _c('button', {
-    key: "hookey",
-    staticClass: "btn-square hookey",
-    on: {
-      "click": function($event) {
-        _vm.setActiveHouse('yellow')
-      }
-    }
-  }, [_vm._v("\n\t\t\t\t\tHookey\n\t\t\t\t")]) : _c('button', {
-    key: "plus10",
-    staticClass: "btn-square",
-    class: _vm.activeHouse,
-    on: {
-      "click": function($event) {
-        _vm.addScore(10)
-      }
-    }
-  }, [_vm._v("\n\t\t\t\t\t+10\n\t\t\t\t")])]), _vm._v(" "), _c('transition', {
-    attrs: {
-      "enter-active-class": "animated bounceIn",
-      "leave-active-class": "animated bounceOut",
-      "mode": "out-in"
-    }
-  }, [(!_vm.activeHouse) ? _c('button', {
-    key: "walling",
-    staticClass: "btn-square walling",
-    on: {
-      "click": function($event) {
-        _vm.setActiveHouse('green')
-      }
-    }
-  }, [_vm._v("\n\t\t\t\t\tWalling\n\t\t\t\t")]) : _c('button', {
-    key: "plus20",
-    staticClass: "btn-square",
-    class: _vm.activeHouse,
-    on: {
-      "click": function($event) {
-        _vm.addScore(20)
-      }
-    }
-  }, [_vm._v("\n\t\t\t\t\t+20\n\t\t\t\t")])]), _vm._v(" "), _c('transition', {
-    attrs: {
-      "enter-active-class": "animated bounceIn",
-      "leave-active-class": "animated bounceOut",
-      "mode": "out-in"
-    }
-  }, [(!_vm.activeHouse) ? _c('button', {
-    key: "jamieson",
-    staticClass: "btn-square jamieson",
-    on: {
-      "click": function($event) {
-        _vm.setActiveHouse('red')
-      }
-    }
-  }, [_vm._v("\n\t\t\t\t\tJamieson\n\t\t\t\t")]) : _c('button', {
-    key: "plus50",
-    staticClass: "btn-square",
-    class: _vm.activeHouse,
-    on: {
-      "click": function($event) {
-        _vm.addScore(50)
-      }
-    }
-  }, [_vm._v("\n\t\t\t\t\t+50\n\t\t\t\t")])])], 1)])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-02ad73d5", module.exports)
-  }
-}
-
-/***/ }),
-/* 439 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "container"
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-8 col-md-offset-2"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-heading"
-  }, [_vm._v("Example Component")]), _vm._v(" "), _c('div', {
-    staticClass: "panel-body"
-  }, [_vm._v("\n                    I'm an example component!\n                ")])])])])])
-}]}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-163dbe4b", module.exports)
-  }
-}
-
-/***/ }),
-/* 440 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('li', {
-    staticClass: "main-button button-animate",
-    on: {
-      "click": function($event) {
-        _vm.redirect(_vm.link.href)
-      }
-    }
-  }, [_c('img', {
-    attrs: {
-      "src": "http://placehold.it/100x100"
-    }
-  })])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-a330b73e", module.exports)
-  }
-}
-
-/***/ }),
-/* 441 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -78439,13 +78243,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), _c('ul', {
     staticClass: "student-list"
-  }, _vm._l((_vm.computedList), function(student) {
+  }, _vm._l((_vm.queryList), function(student) {
     return _c('li', {
       staticClass: "student",
-      class: student.house,
+      class: student.color,
       on: {
         "click": function($event) {
-          _vm.setActiveHouse(student.house)
+          _vm.setActiveHouse(student.house_id)
         }
       }
     }, [_vm._v("\n\t\t\t " + _vm._s(student.name) + " ( " + _vm._s(student.grade) + " )\n\t\t")])
@@ -78455,7 +78259,105 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-fb26b2ba", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-2107d932", module.exports)
+  }
+}
+
+/***/ }),
+/* 439 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_c('div', {
+    staticClass: "square-buttons"
+  }, _vm._l((_vm.houses), function(house, index) {
+    return _c('transition', {
+      attrs: {
+        "enter-active-class": "animated bounceIn",
+        "leave-active-class": "animated bounceOut",
+        "mode": "out-in"
+      }
+    }, [(!_vm.activeHouse) ? _c('button', {
+      key: "house.name",
+      staticClass: "btn-square",
+      class: house.color,
+      on: {
+        "click": function($event) {
+          _vm.setActiveHouse(house)
+        }
+      }
+    }, [_vm._v("\n\t\t\t\t" + _vm._s(house.name) + "\n\t\t\t")]) : _c('button', {
+      key: "plus",
+      staticClass: "btn-square",
+      class: _vm.currentlyActiveHouse.color,
+      on: {
+        "click": function($event) {
+          _vm.addScore(_vm.setScores[index])
+        }
+      }
+    }, [_vm._v("\n\t\t\t\t+ " + _vm._s(_vm.setScores[index]) + "\n\t\t\t")])])
+  }))])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-378b9f91", module.exports)
+  }
+}
+
+/***/ }),
+/* 440 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _vm._m(0)
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "container"
+  }, [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-md-8 col-md-offset-2"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-heading"
+  }, [_vm._v("Example Component")]), _vm._v(" "), _c('div', {
+    staticClass: "panel-body"
+  }, [_vm._v("\n                    I'm an example component!\n                ")])])])])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-606a2d0f", module.exports)
+  }
+}
+
+/***/ }),
+/* 441 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', {
+    staticClass: "main-button button-animate",
+    on: {
+      "click": function($event) {
+        _vm.redirect(_vm.link.href)
+      }
+    }
+  }, [_c('img', {
+    attrs: {
+      "src": "http://placehold.it/100x100"
+    }
+  })])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-7d5f65c6", module.exports)
   }
 }
 

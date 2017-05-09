@@ -1,100 +1,42 @@
 <template>
 	<div>
 		<div class="square-buttons">
+
 			<transition enter-active-class="animated bounceIn"
-    					leave-active-class="animated bounceOut"
-						mode="out-in">
-				<button class="btn-square bell"
+				v-for="(house, index) in houses"
+				leave-active-class="animated bounceOut"
+				mode="out-in">
+
+				<button class="btn-square"
 						v-if="!activeHouse"
-						@click="setActiveHouse('blue')"
-						key="bell"
+						@click="setActiveHouse(house)"
+						key="house.name"
+						v-bind:class="house.color"
 						>
-					Bell
+					{{ house.name }}
 				</button>
 
 				<button class="btn-square"
-						v-bind:class="activeHouse"
+						v-bind:class="currentlyActiveHouse.color"
 						v-else
-						@click="addScore(5)"
-						key="plus5"
+						@click="addScore(setScores[index])"
+						key="plus"
 						>
-					+5
+					+ {{ setScores[index] }}
 				</button>
 			</transition>
 
-			<transition enter-active-class="animated bounceIn"
-    					leave-active-class="animated bounceOut"
-						mode="out-in">
-				<button class="btn-square hookey"
-						v-if="!activeHouse"
-						@click="setActiveHouse('yellow')"
-						key="hookey"
-						>
-					Hookey
-				</button>
-
-				<button class="btn-square"
-						v-bind:class="activeHouse"
-						v-else
-						@click="addScore(10)"
-						key="plus10"
-						>
-					+10
-				</button>
-			</transition>
-
-			<transition enter-active-class="animated bounceIn"
-    					leave-active-class="animated bounceOut"
-						mode="out-in">
-				<button class="btn-square walling"
-						v-if="!activeHouse"
-						@click="setActiveHouse('green')"
-						key="walling"
-						>
-					Walling
-				</button>
-
-				<button class="btn-square"
-						v-bind:class="activeHouse"
-					v-else
-					@click="addScore(20)"
-					key="plus20"
-					>
-					+20
-				</button>
-			</transition>
-
-			<transition enter-active-class="animated bounceIn"
-    					leave-active-class="animated bounceOut"
-						mode="out-in">
-				<button class="btn-square jamieson"
-						v-if="!activeHouse"
-						@click="setActiveHouse('red')"
-						key="jamieson"
-						>
-					Jamieson
-				</button>
-
-				<button class="btn-square"
-						v-bind:class="activeHouse"
-						v-else
-						@click="addScore(50)"
-						key="plus50"
-						>
-					+50
-				</button>
-			</transition>
-		</div>	
+		</div>
 	</div>
 </template>
 
 <script>
 	export default {
-		props: ['activeHouse'],
+		props: ['houses','activeHouse'],
 
 		data() {
 			return {
-				//
+				setScores: [5,10,20,50]
 			}
 		},
 
@@ -106,7 +48,7 @@
 
 		methods: {
 			setActiveHouse(house) {
-				this.$emit('house-set', house);
+				this.$emit('house-set', house.id);
 				this.currentlyActiveHouse = house;
 			},
 

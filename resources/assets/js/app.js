@@ -19,6 +19,7 @@ Vue.component('link-button', require('./components/Button.vue'));
 Vue.component('manage-scores', require('./components/ManageScores.vue'));
 Vue.component('find-student', require('./components/FindStudent.vue'));
 
+
 import { Bar } from 'vue-chartjs';
 
 const app = new Vue({
@@ -27,6 +28,7 @@ const app = new Vue({
     mounted() {
         this.getHouses();
         this.getScores();
+        this.getStudents();
     },
 
     computed: {
@@ -39,48 +41,74 @@ const app = new Vue({
 
     data() {
     	return {
+            displayLabels: [],
+            displayScores: [],
+            displayColors: [],
             activeHouse: null,
             findStudent: null,
+            viewTable: false,
+            students: null,
             houses: {},
-            scores: {}
+            scores: null,
+            lastWeekScores: null,
+            week: true,
+            year: false
         }
     },
 
     methods: {
         getScores() {
+            var self = this;
             axios.get('/api/calculate')
                 .then((response) => {
-                    this.scores = response.data
+                    this.scores = response.data.data
+                })
+            axios.get('/api/calculate?scope=last-week')
+                .then((response) => {
+                    this.lastWeekScores = response.data.data
                 })
         },
 
         getHouses() {
             axios.get('/api/houses')
                 .then((response) => {
-                    this.houses = response.data
+                    this.houses = response.data.data
                 })
         },
 
+        getStudents() {
+          axios.get('/api/students')
+            .then((response) => {
+              this.students = response.data.data
+            })
+        },
+
         scoreAdded(score) {
-            this.scores[this.activeHouse]+= score;
+            this.getScores();
+            this.year = false
+            this.week = true
         },
 
         activeHouseSet(house) {
             this.findStudent = false;
-            this.activeHouse = house;
+            this.activeHouse = this.houses[house - 1];
         },
 
         viewYearlyScores() {
+            this.year = true
+            this.week = false
             axios.get('/api/calculate?scope=year')
                 .then((response) => {
-                    this.scores = response.data
+                    this.scores = response.data.data
                 })
         },
 
         viewWeeklyScores() {
+            this.year = false
+            this.week = true
             axios.get('/api/calculate')
                 .then((response) => {
-                    this.scores = response.data
+                    this.scores = response.data.data
                 })
         },
 
@@ -88,7 +116,6 @@ const app = new Vue({
             this.findStudent = null,
             this.activeHouse = null
         }
+
     }
 });
-
-

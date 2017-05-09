@@ -2,7 +2,7 @@
 
 // Fonts
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
-@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700);	
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700);
 @import url(https://unpkg.com/animate.css@3.5.1/animate.min.css);
 @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
 
@@ -98,10 +98,13 @@ html, body {
 		flex: 5 0 calc(100% - 10px);
 	}
 	&.third{
-		flex: 5 0 calc(33% - 10px);	
+		flex: 5 0 calc(33% - 10px);
 	}
 	&.grey{
 		background-color: #acacac;
+    &.active {
+      background-color: #313131;
+    }
 	}
 }
 .yellow, .hookey{

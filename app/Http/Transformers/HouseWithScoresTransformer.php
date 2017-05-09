@@ -18,6 +18,7 @@ class HouseWithScoresTransformer extends TransformerAbstract
             'id'      => (int) $house->id,
             'name'    => $house->name,
             'color'   => $house->color,
+            'hex'     => $house->hex,
             'score'   => (int) $house->score,
         ];
     }

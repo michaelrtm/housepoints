@@ -22,10 +22,10 @@ class ScoreController extends ApiController
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'house_id' => 'required|numeric',
-            'score' => 'required|numeric',
-        ]);
+        // $this->validate($request, [
+        //     'house_id' => 'required|numeric',
+        //     'score' => 'required|numeric',
+        // ]);
 
         $score = new Score();
         $score->house_id = $request->house_id;
