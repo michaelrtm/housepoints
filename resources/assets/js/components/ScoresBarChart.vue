@@ -2,10 +2,20 @@
 import { Bar } from 'vue-chartjs'
 
 export default Bar.extend({
-    props: ['scores','toggle'],
 
-    mounted () {
-
+    mounted() {
+      var self = this
+      this.$store.watch(
+        function(state) {
+          return self.$store.getters.scores
+        },
+        function() {
+          self.buildScores()
+        },
+        {
+          deep: true,
+          immediate: true
+        })
     },
 
     data() {
@@ -16,9 +26,9 @@ export default Bar.extend({
       }
     },
 
-    watch: {
+    computed: {
       scores() {
-        this.buildScores()
+        return this.$store.state.scores
       }
     },
 

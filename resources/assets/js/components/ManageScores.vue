@@ -1,6 +1,10 @@
 <template>
 	<div>
 		<div class="square-buttons">
+			<router-link to="/search" class="btn-square grey wide" tag="button"><i class="fa fa-user"></i> Find Student</router-link>
+		</div>
+
+		<div class="square-buttons">
 
 			<transition enter-active-class="animated bounceIn"
 				v-for="(house, index) in houses"
@@ -17,7 +21,7 @@
 				</button>
 
 				<button class="btn-square"
-						v-bind:class="currentlyActiveHouse.color"
+						v-bind:class="activeHouse.color"
 						v-else
 						@click="addScore(setScores[index])"
 						key="plus"
@@ -32,7 +36,10 @@
 
 <script>
 	export default {
-		props: ['houses','activeHouse'],
+
+		mounted() {
+			this.getHouses()
+		},
 
 		data() {
 			return {
@@ -41,26 +48,34 @@
 		},
 
 		computed: {
-			currentlyActiveHouse() {
-				return this.activeHouse;
+			activeHouse() {
+				return this.$store.getters.getActiveHouse
+			},
+			houses() {
+				return this.$store.getters.getHouses
 			}
 		},
 
 		methods: {
+			getHouses() {
+				axios.get('/api/houses')
+				  .then((response) => {
+						this.$store.commit('setHouses', response.data.data)
+			    })
+			},
+
 			setActiveHouse(house) {
-				this.$emit('house-set', house.id);
-				this.currentlyActiveHouse = house;
+				this.$store.commit('changeActiveHouse', house.id)
 			},
 
 			clearActiveHouse() {
-				this.$emit('house-set', null);
-				this.currentlyActiveHouse = null;
+				this.$store.commit('changeActiveHouse', null)
 			},
 
 			addScore(score) {
 				axios.post('/api/scores', {score: score, house_id: this.activeHouse.id} )
 					.then((response) => {
-						this.$emit('scored', score)
+						this.$store.commit('addScore', {score: score, house_id: this.activeHouse.id})
 						this.clearActiveHouse()
 					})
 					.catch((response) => {

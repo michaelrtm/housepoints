@@ -1,8 +1,3 @@
-<!-- <template>
-	<div>
-		Placeholder for searching students
-	</div>
-</template> -->
 <template>
 	<div>
 		<i class="fa fa-user"></i>
@@ -18,10 +13,14 @@
 
 <script>
 	export default {
-		props: ['students'],
+
+		mounted() {
+			this.getStudents()
+		},
 
 		data() {
 			return {
+				students: [],
 				query: ""
 			};
 		},
@@ -36,8 +35,16 @@
 		},
 
 		methods: {
+			getStudents() {
+				axios.get('/api/students')
+					.then((response) => {
+						this.students = response.data.data
+					})
+			},
+
 			setActiveHouse(house) {
-				this.$emit('active-house-set', house);
+				this.$store.commit('changeActiveHouse', house)
+				this.$router.push('/')
 			}
 		}
 	}

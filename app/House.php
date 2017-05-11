@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Student;
+use App\Captain;
 
 class House extends Model
 {
@@ -11,5 +12,13 @@ class House extends Model
 
     public function students(){
       return $this->hasMany(Student::class);
+    }
+
+    public function captains(){
+        return $this->hasMany(Captain::class);
+    }
+
+    public function scores(){
+        return $this->hasMany(Score::class);
     }
 }

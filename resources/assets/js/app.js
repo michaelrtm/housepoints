@@ -7,28 +7,72 @@
 
 require('./bootstrap');
 
+import VueRouter from 'vue-router';
+import Vuex from 'vuex';
+
+Vue.use(VueRouter);
+Vue.use(Vuex);
+
+import { routes } from './router.js';
+const router = new VueRouter({ routes });
+
+const store = new Vuex.Store({
+  state: {
+    activeHouse: null,
+    findStudent: null,
+    students: null,
+    houses: {},
+    scores: null,
+  },
+  mutations: {
+    setHouses (state, houses) {
+      state.houses = houses
+    },
+    changeActiveHouse (state, house) {
+      var house_obj = _.find(state.houses, { id: house })
+      state.activeHouse = house_obj
+    },
+    changeScores (state, scores) {
+      state.scores = scores
+    },
+    addScore (state, data) {
+      var house = _.findKey(state.scores, { 'id': data.house_id })
+      state.scores[house].score += data.score
+    }
+  },
+  getters: {
+    scores: state => {
+      return state.scores
+    },
+    getActiveHouse: state => {
+      return state.activeHouse
+    },
+    getHouses: state => {
+      return state.houses
+    }
+  }
+})
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
-Vue.component('house-points', require('./components/HousePoints.vue'));
+Vue.component('scores-bar-chart', require('./components/ScoresBarChart.vue'))
 Vue.component('link-button', require('./components/Button.vue'));
 Vue.component('manage-scores', require('./components/ManageScores.vue'));
 Vue.component('find-student', require('./components/FindStudent.vue'));
 
-
 import { Bar } from 'vue-chartjs';
 
 const app = new Vue({
-    el: '#app',
+    store,
+    router,
 
     mounted() {
-        this.getHouses();
-        this.getScores();
-        this.getStudents();
+        // this.getHouses();
+        // this.getStudents();
     },
 
     computed: {
@@ -41,81 +85,25 @@ const app = new Vue({
 
     data() {
     	return {
-            displayLabels: [],
-            displayScores: [],
-            displayColors: [],
-            activeHouse: null,
-            findStudent: null,
-            viewTable: false,
-            students: null,
-            houses: {},
-            scores: null,
-            lastWeekScores: null,
-            week: true,
-            year: false
+
         }
     },
 
     methods: {
-        getScores() {
-            var self = this;
-            axios.get('/api/calculate')
-                .then((response) => {
-                    this.scores = response.data.data
-                })
-            axios.get('/api/calculate?scope=last-week')
-                .then((response) => {
-                    this.lastWeekScores = response.data.data
-                })
-        },
 
-        getHouses() {
-            axios.get('/api/houses')
-                .then((response) => {
-                    this.houses = response.data.data
-                })
-        },
+        scored() {
 
-        getStudents() {
-          axios.get('/api/students')
-            .then((response) => {
-              this.students = response.data.data
-            })
         },
-
-        scoreAdded(score) {
-            this.getScores();
-            this.year = false
-            this.week = true
-        },
-
-        activeHouseSet(house) {
-            this.findStudent = false;
-            this.activeHouse = this.houses[house - 1];
-        },
-
-        viewYearlyScores() {
-            this.year = true
-            this.week = false
-            axios.get('/api/calculate?scope=year')
-                .then((response) => {
-                    this.scores = response.data.data
-                })
-        },
-
-        viewWeeklyScores() {
-            this.year = false
-            this.week = true
-            axios.get('/api/calculate')
-                .then((response) => {
-                    this.scores = response.data.data
-                })
-        },
-
+        //
+        // activeHouseSet(house) {
+        //     this.findStudent = false;
+        //     this.activeHouse = this.houses[house - 1];
+        // },
+        //
         clearAll() {
             this.findStudent = null,
             this.activeHouse = null
         }
 
     }
-});
+}).$mount('#app')
