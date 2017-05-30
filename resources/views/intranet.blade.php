@@ -24,18 +24,16 @@
 		<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						<transition enter-active-class="animated bounceIn"
-    								leave-active-class="animated bounceOut"
-	    							>
-							<button class="btn cancel" @click="clearAll" v-show="houseOrStudentActive">
-								<i class="fa fa-times"></i>
-							</button>
-						</transition>
-						<router-link to="/settings" :test="houseOrStudentActive">
-							<button class="btn cancel">
-								<i class="fa fa-cogs"></i>
-							</button>
-						</router-link>
+						<span v-if="exitNeeded == true">
+							<exit-button></exit-button>
+						</span>
+						<span v-else>
+							<router-link to="/settings" :test="houseOrStudentActive">
+								<button class="btn cancel">
+									<i class="fa fa-cogs"></i>
+								</button>
+							</router-link>
+						</span>
 						<h1>HOUSE POINTS</h1>
 					</div>
 				</div>

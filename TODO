@@ -3,15 +3,15 @@
  - [x] Filter Find Students
  - [x] Add scores to houses
  - [x] Adding new score watcher on chart
- - [ ] Back buttons
+ - [ ] Exit Needed
  - [ ] Limit number of visible students
- - [ ] Setting active house from searching student
- - [ ] Year / Week view toggle
+ - [x] Setting active house from searching student
+ - [x] Year / Week view toggle
  - [ ] Settings panel
  - [ ] Excel sheet export
  - [ ] Excel import
  - [ ] Manual score entry
  - [ ] Remove scores
- - [ ] CRUD Hrades
+ - [ ] CRUD Grades
  - [ ] CRUD Houses
  - [ ] CRUD Students

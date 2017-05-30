@@ -59,6 +59,7 @@ const store = new Vuex.Store({
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component('exit-button', require('./components/ExitButton.vue'))
 Vue.component('scores-bar-chart', require('./components/ScoresBarChart.vue'))
 Vue.component('link-button', require('./components/Button.vue'));
 Vue.component('manage-scores', require('./components/ManageScores.vue'));
@@ -80,6 +81,9 @@ const app = new Vue({
             this.activeHouse;
             this.findStudent;
             return this.activeHouse || this.findStudent;
+        },
+        exitNeeded() {
+          //test to see if exit is needed
         }
     },
 

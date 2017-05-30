@@ -38905,6 +38905,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component('exit-button', __webpack_require__(464));
 Vue.component('scores-bar-chart', __webpack_require__(443));
 Vue.component('link-button', __webpack_require__(442));
 Vue.component('manage-scores', __webpack_require__(221));
@@ -39842,6 +39843,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = {
 	mounted: function mounted() {
@@ -40125,6 +40127,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
 //
 //
 //
@@ -55046,7 +55051,7 @@ if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(62)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 /***/ }),
 /* 301 */
@@ -78662,7 +78667,7 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('i', {
+  return _c('div', [_c('exit-button'), _vm._v(" "), _c('i', {
     staticClass: "fa fa-user"
   }), _vm._v(" "), _c('input', {
     directives: [{
@@ -78695,7 +78700,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_vm._v("\n\t\t\t " + _vm._s(student.name) + " ( " + _vm._s(student.grade) + " )\n\t\t")])
-  }))])
+  }))], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -78763,7 +78768,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_vm._v("test")])
+  return _c('div', [_c('exit-button'), _vm._v("\n  test\n")], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -82221,6 +82226,99 @@ var index_esm = {
 __webpack_require__(223);
 module.exports = __webpack_require__(224);
 
+
+/***/ }),
+/* 456 */,
+/* 457 */,
+/* 458 */,
+/* 459 */,
+/* 460 */,
+/* 461 */,
+/* 462 */,
+/* 463 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = {
+  methods: {
+    exit: function exit() {
+      this.$router.push('/');
+    }
+  }
+};
+
+/***/ }),
+/* 464 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(12)(
+  /* script */
+  __webpack_require__(463),
+  /* template */
+  __webpack_require__(465),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/Users/mooroolbarkeastprimaryschool/Code/housepoints/resources/assets/js/components/ExitButton.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] ExitButton.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-058f335b", Component.options)
+  } else {
+    hotAPI.reload("data-v-058f335b", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 465 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('transition', {
+    attrs: {
+      "enter-active-class": "animated bounceIn",
+      "leave-active-class": "animated bounceOut"
+    }
+  }, [_c('button', {
+    staticClass: "btn cancel",
+    on: {
+      "click": _vm.exit
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-times"
+  })])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-058f335b", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
