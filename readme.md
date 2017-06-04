@@ -1,11 +1,9 @@
 # House Points Tracker #
 
-Developed as an example app for my students, to show how a simple web app could operate.
-Students designed an app to keep track of the school's house points. They used PowerPoint to show interaction with elements.
+Developed as an example app for my students, to show how a simple web app could operate. Potential to add to the school's intranet to drive students to want to earn the points, instead of them being arbitrarily assigned each week.
 
-Incomplete.
+## Todo ##
 
-Todo
 * Auth
 * Mobile view
 * Clean up student search (ajax request after search params at least 3 chars)?
