@@ -22,4 +22,16 @@ class House extends Model
     public function scores(){
         return $this->hasMany(Score::class);
     }
+
+    public function getCurrentWeekScores(){
+        return $this->scores()->currentWeek()->sum('score');
+    }
+
+    public function getLastWeekScores(){
+        return $this->scores()->lastWeek()->sum('score');
+    }
+
+    public function getCurrentYearScores(){
+        return $this->scores()->currentYear()->sum('score');
+    }
 }
