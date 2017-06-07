@@ -4,16 +4,18 @@ Developed as an example app for my students, to show how a simple web app could 
 
 ## Todo ##
 
+
 * Auth
-* Mobile view
-* Clean up student search (ajax request after search params at least 3 chars)?
 * Admin interface to mangage houses / colours
+* Clean up student search (ajax request after search params at least 3 chars)?
+* Mobile view
 * House histories?
 * Captains
 
 ## Install ##
 ```
-copy repo
+git clone https://michaelrtm@bitbucket.org/michaelrtm/housepoints.git
+cd housepoints
 composer install
 php artisan migrate
 php artisan db:seed
