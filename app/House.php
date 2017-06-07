@@ -8,6 +8,7 @@ use App\Captain;
 
 class House extends Model
 {
+    protected $guarded = [];
     protected $appends = array('score');
 
     public function students(){

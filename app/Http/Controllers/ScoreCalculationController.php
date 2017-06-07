@@ -24,7 +24,7 @@ class ScoreCalculationController extends ApiController
             $endScope = Carbon::now();
         }
 
-        if($scope == 'last-week'){
+        if($scope == 'lastweek'){
             $startScope = Carbon::now()->subWeek()->startOfWeek();
             $endScope = Carbon::now()->subWeek()->endOfWeek();
         }
