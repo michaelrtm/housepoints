@@ -28,6 +28,7 @@ $factory->define(App\House::class, function (Faker\Generator $faker) {
         'name' => $faker->company,
         'color' => $faker->colorName,
         'blurb' => $faker->paragraph(5),
+        'hex' => $faker->hexcolor,
     ];
 });
 
