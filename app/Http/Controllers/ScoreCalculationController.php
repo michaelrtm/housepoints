@@ -13,30 +13,27 @@ class ScoreCalculationController extends ApiController
 {
     public function index()
     {
-        $startScope = Carbon::now()->startOfWeek();
-        $endScope = Carbon::now();
-
         $houses = House::all();
-        $scope = Input::get('scope');
 
-        if($scope == 'year'){
-            $startScope = Carbon::now()->startOfYear();
-            $endScope = Carbon::now();
+        //this is still too messy
+        if(Input::get('scope') == 'year'){
+            $housesWithScores = $houses->map(function($house) {
+                $house->score = $house->getCurrentYearScores(); 
+                return $house;
+            });        
         }
-
-        if($scope == 'last-week'){
-            $startScope = Carbon::now()->subWeek()->startOfWeek();
-            $endScope = Carbon::now()->subWeek()->endOfWeek();
+        elseif(Input::get('scope') == 'last-week'){
+            $housesWithScores = $houses->map(function($house) {
+                $house->score = $house->getLastWeekScores();
+                return $house;
+            });
         }
-
-        $housesWithScores = $houses->map(function ($house) use ($startScope, $endScope) {
-            $score = Score::where('house_id', '=', $house->id)
-                ->whereBetween('created_at', [$startScope, $endScope])
-                ->sum('score');
-
-            $house->score = $score;
-            return $house;
-        });
+        else {
+            $housesWithScores = $houses->map(function($house) {
+                $house->score = $house->getCurrentWeekScores();
+                return $house;
+            });
+        }
 
         return $this->respondWithCollection($housesWithScores, new HouseWithScoresTransformer);
     }
