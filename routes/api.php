@@ -18,11 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 $router->get('/houses', 'HouseController@index');
-
 $router->get('/students', 'StudentController@index');
-
 $router->get('/scores', 'ScoreController@index');
 $router->get('/scores/{score}', 'ScoreController@show');
 $router->post('/scores', 'ScoreController@store');
-
 $router->get('/calculate', 'ScoreCalculationController@index');
