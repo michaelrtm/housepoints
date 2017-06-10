@@ -19,7 +19,7 @@ class CreateHouseTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user, 'api')->post('/api/houses', [
+        $response = $this->actingAs($user, 'api')->json('post', '/api/houses', [
             'name' => 'Elrond',
             'color' => 'red',
             'blurb' => 'The house of Elrond is in Rivendell',
@@ -38,9 +38,7 @@ class CreateHouseTest extends TestCase
     /** @test */
     function only_a_registered_user_can_add_a_house()
     {
-        $this->disableExceptionHandling();
-        
-        $response = $this->post('/api/houses', [
+        $response = $this->json('post', '/api/houses', [
             'name' => 'Whiterun',
             'color' => 'white',
             'blurb' => 'The house of Whiterun is opposed to the Stormcloaks.',

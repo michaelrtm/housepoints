@@ -18,7 +18,7 @@ class HouseController extends ApiController
             'name' => $request->name,
             'color' => $request->color,
             'hex' => $request->hex,
-            'blurb' => nl2br($request->blurb), //todo check if there is a better option - this should be on the model?
+            'blurb' => $request->blurb,
         ]);
         return $this->respondWithCreated();
     }
