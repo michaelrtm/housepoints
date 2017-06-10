@@ -2,24 +2,16 @@
 
 use Illuminate\Http\Request;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'auth:api'], function(){
+    Route::post('/houses', 'HouseController@store');
+    Route::put('/houses/{id}', 'HouseController@update');
+    Route::delete('/houses/{id}', 'HouseController@delete');
 });
 
-$router->get('/houses', 'HouseController@index');
-$router->get('/students', 'StudentController@index');
-$router->get('/scores', 'ScoreController@index');
-$router->get('/scores/{score}', 'ScoreController@show');
-$router->post('/scores', 'ScoreController@store');
-$router->get('/calculate', 'ScoreCalculationController@index');
+Route::get('/houses', 'HouseController@index');
+
+Route::get('/students', 'StudentController@index');
+Route::get('/scores', 'ScoreController@index');
+Route::get('/scores/{score}', 'ScoreController@show');
+Route::post('/scores', 'ScoreController@store');
+Route::get('/calculate', 'ScoreCalculationController@index');

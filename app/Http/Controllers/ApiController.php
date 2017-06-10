@@ -113,7 +113,17 @@ class ApiController extends Controller
 
     public function respondWithDeleted()
     {
-        return response('',204);
+        return response('', 204);
+    }
+
+    public function respondWithStatus($statusCode)
+    {
+        return response('', $statusCode);
+    }
+
+    public function respondWithCreated()
+    {
+        return response('', 201);
     }
 
     /**
