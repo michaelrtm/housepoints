@@ -51,11 +51,11 @@ class ViewCalculatedScoresByScopeTest extends TestCase
         $house = factory(House::class)->create();
         $house->scores()->create([
             'score' => 12,
-            'created_at' => Carbon::parse('yesterday'),
+            'created_at' => Carbon::parse('this monday'),
         ]);
         $house->scores()->create([
             'score' => 15,
-            'created_at' => Carbon::now()->subWeek(),
+            'created_at' => Carbon::parse('last tuesday'),
         ]);
         $house->scores()->create([
             'score' => 12,

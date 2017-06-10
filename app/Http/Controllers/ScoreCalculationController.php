@@ -15,26 +15,20 @@ class ScoreCalculationController extends ApiController
     {
         $houses = House::all();
 
-        //this is still too messy
-        if(Input::get('scope') == 'year'){
-            $housesWithScores = $houses->map(function($house) {
+        $housesWithScores = $houses->map(function($house) {
+            if(Input::get('scope') == 'year'){
                 $house->score = $house->getCurrentYearScores(); 
                 return $house;
-            });        
-        }
-        elseif(Input::get('scope') == 'last-week'){
-            $housesWithScores = $houses->map(function($house) {
+            }    
+            elseif(Input::get('scope') == 'last-week'){
                 $house->score = $house->getLastWeekScores();
                 return $house;
-            });
-        }
-        else {
-            $housesWithScores = $houses->map(function($house) {
+            }
+            else {
                 $house->score = $house->getCurrentWeekScores();
                 return $house;
-            });
-        }
-
+            }
+        });
         return $this->respondWithCollection($housesWithScores, new HouseWithScoresTransformer);
     }
 }
