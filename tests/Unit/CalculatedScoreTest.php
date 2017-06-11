@@ -30,7 +30,7 @@ class CalculatedScoreTest extends TestCase
     function view_calculated_scores_for_a_house_for_current_week()
     {
         $this->add_score(12, Carbon::parse('yesterday'));
-        $this->add_score(15, Carbon::now()->subWeek());
+        $this->add_score(15, Carbon::parse('wednesday last week'));
         $this->add_score(10, Carbon::parse('-5 months'));
 
         $this->assertEquals(12, $this->house->getCurrentWeekScores());
@@ -40,7 +40,7 @@ class CalculatedScoreTest extends TestCase
     function view_calculated_scores_for_a_house_for_previous_week()
     {
         $this->add_score(12, Carbon::parse('yesterday'));
-        $this->add_score(15, Carbon::now()->subWeek());
+        $this->add_score(15, Carbon::parse('wednesday last week'));
         $this->add_score(10, Carbon::parse('-5 months'));
 
         $this->assertEquals(15, $this->house->getLastWeekScores());
@@ -50,7 +50,7 @@ class CalculatedScoreTest extends TestCase
     function view_calculated_scores_for_a_house_for_current_year()
     {
         $this->add_score(12, Carbon::parse('yesterday'));
-        $this->add_score(15, Carbon::now()->subWeek());
+        $this->add_score(15, Carbon::parse('wednesday last week'));
         $this->add_score(10, Carbon::parse('-5 months'));
 
         $this->assertEquals(37, $this->house->getCurrentYearScores());

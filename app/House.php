@@ -34,4 +34,9 @@ class House extends Model
     public function getCurrentYearScores(){
         return $this->scores()->currentYear()->sum('score');
     }
+
+    public function getBlurbAttribute($value)
+    {
+        return nl2br($value);
+    }
 }
