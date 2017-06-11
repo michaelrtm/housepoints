@@ -15,3 +15,4 @@ Route::get('/scores', 'ScoreController@index');
 Route::get('/scores/{score}', 'ScoreController@show');
 Route::post('/scores', 'ScoreController@store');
 Route::get('/calculate', 'ScoreCalculationController@index');
+Route::post('/students/search', 'StudentSearchController@index');
