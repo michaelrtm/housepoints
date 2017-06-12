@@ -1,3 +1,6 @@
+![screen shot 2017-06-12 at 2 00 43 pm](https://user-images.githubusercontent.com/1237753/27018965-cd5498d6-4f77-11e7-913a-315383a6e715.png)
+
+
 # House Points Tracker #
 
 Developed as an example app for my students, to show how a simple web app could operate. Potential to add to the school's intranet to drive students to want to earn the points, instead of them being arbitrarily assigned each week.
