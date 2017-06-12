@@ -38864,6 +38864,7 @@ var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({ r
 
 var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
   state: {
+    exitNeeded: false,
     activeHouse: null,
     findStudent: null,
     students: null,
@@ -38873,6 +38874,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
   mutations: {
     setHouses: function setHouses(state, houses) {
       state.houses = houses;
+    },
+    setExitNeeded: function setExitNeeded(state) {
+      state.exitNeeded = !state.exitNeeded;
     },
     changeActiveHouse: function changeActiveHouse(state, house) {
       var house_obj = _.find(state.houses, { id: house });
@@ -38895,6 +38899,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     },
     getHouses: function getHouses(state) {
       return state.houses;
+    },
+    getExitNeeded: function getExitNeeded(state) {
+      return state.exitNeeded;
     }
   }
 });
@@ -38918,8 +38925,7 @@ var app = new Vue({
   router: router,
 
   mounted: function mounted() {
-    // this.getHouses();
-    // this.getStudents();
+    //
   },
 
 
@@ -38930,24 +38936,18 @@ var app = new Vue({
       return this.activeHouse || this.findStudent;
     },
     exitNeeded: function exitNeeded() {
-      //test to see if exit is needed
+      return this.$store.getters.getExitNeeded;
     }
   },
 
   data: function data() {
-    return {};
+    return {
+      //
+    };
   },
 
 
   methods: {
-    scored: function scored() {},
-
-    //
-    // activeHouseSet(house) {
-    //     this.findStudent = false;
-    //     this.activeHouse = this.houses[house - 1];
-    // },
-    //
     clearAll: function clearAll() {
       this.findStudent = null, this.activeHouse = null;
     }
@@ -39847,6 +39847,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = {
   methods: {
     exit: function exit() {
+      this.$store.commit('setExitNeeded');
+      this.$store.commit('changeActiveHouse', null);
       this.$router.push('/');
     }
   }
@@ -39874,7 +39876,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = {
 	mounted: function mounted() {
-		//this.getStudents()
+		this.$store.commit('setExitNeeded');
 	},
 	data: function data() {
 		return {
@@ -39980,17 +39982,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			});
 		},
 		setActiveHouse: function setActiveHouse(house) {
+			this.$store.commit('setExitNeeded');
 			this.$store.commit('changeActiveHouse', house.id);
 		},
 		clearActiveHouse: function clearActiveHouse() {
+			this.$store.commit('setExitNeeded');
 			this.$store.commit('changeActiveHouse', null);
 		},
 		addScore: function addScore(score) {
 			var _this2 = this;
 
 			axios.post('/api/scores', { score: score, house_id: this.activeHouse.id }).then(function (response) {
+				_this2.$store.commit('setExitNeeded');
 				_this2.$store.commit('addScore', { score: score, house_id: _this2.activeHouse.id });
-				_this2.clearActiveHouse();
+				_this2.$store.commit('changeActiveHouse', null);
 			}).catch(function (response) {
 				console.log('mistake');
 				console.log(response);
@@ -40162,7 +40167,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = {
-  props: ['houseOrStudentActive']
+  mounted: function mounted() {
+    this.$store.commit('setExitNeeded');
+  }
 };
 
 /***/ }),
@@ -55077,7 +55084,7 @@ if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(62)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 /***/ }),
 /* 302 */
@@ -78733,7 +78740,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "leave-active-class": "animated bounceOut"
     }
   }, [_c('button', {
-    staticClass: "btn cancel",
     on: {
       "click": _vm.exit
     }
@@ -78763,6 +78769,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       value: (_vm.query),
       expression: "query"
     }],
+    staticClass: "search-box",
     attrs: {
       "type": "text"
     },

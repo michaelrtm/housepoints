@@ -18,6 +18,7 @@ const router = new VueRouter({ routes });
 
 const store = new Vuex.Store({
   state: {
+    exitNeeded: false,
     activeHouse: null,
     findStudent: null,
     students: null,
@@ -27,6 +28,9 @@ const store = new Vuex.Store({
   mutations: {
     setHouses (state, houses) {
       state.houses = houses
+    },
+    setExitNeeded (state) {
+      state.exitNeeded = !state.exitNeeded
     },
     changeActiveHouse (state, house) {
       var house_obj = _.find(state.houses, { id: house })
@@ -49,7 +53,10 @@ const store = new Vuex.Store({
     },
     getHouses: state => {
       return state.houses
-    }
+    },
+    getExitNeeded: state => {
+      return state.exitNeeded
+    },
   }
 })
 
@@ -72,8 +79,7 @@ const app = new Vue({
     router,
 
     mounted() {
-        // this.getHouses();
-        // this.getStudents();
+      //
     },
 
     computed: {
@@ -83,31 +89,20 @@ const app = new Vue({
             return this.activeHouse || this.findStudent;
         },
         exitNeeded() {
-          //test to see if exit is needed
+          return this.$store.getters.getExitNeeded;
         }
     },
 
     data() {
     	return {
-
+          //
         }
     },
 
     methods: {
-
-        scored() {
-
-        },
-        //
-        // activeHouseSet(house) {
-        //     this.findStudent = false;
-        //     this.activeHouse = this.houses[house - 1];
-        // },
-        //
         clearAll() {
             this.findStudent = null,
             this.activeHouse = null
         }
-
     }
 }).$mount('#app')

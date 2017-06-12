@@ -135,3 +135,6 @@ html, body {
 	float: right;
 	margin-top: 25px;
 }
+.search-box {
+	flex: 5 0 calc(100% - 10px);
+}

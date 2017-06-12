@@ -65,18 +65,21 @@
 			},
 
 			setActiveHouse(house) {
+				this.$store.commit('setExitNeeded')
 				this.$store.commit('changeActiveHouse', house.id)
 			},
 
 			clearActiveHouse() {
+				this.$store.commit('setExitNeeded')
 				this.$store.commit('changeActiveHouse', null)
 			},
 
 			addScore(score) {
 				axios.post('/api/scores', {score: score, house_id: this.activeHouse.id} )
 					.then((response) => {
+						this.$store.commit('setExitNeeded')
 						this.$store.commit('addScore', {score: score, house_id: this.activeHouse.id})
-						this.clearActiveHouse()
+						this.$store.commit('changeActiveHouse', null)
 					})
 					.catch((response) => {
 						console.log('mistake')

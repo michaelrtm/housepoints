@@ -2,7 +2,7 @@
   <transition enter-active-class="animated bounceIn"
           leave-active-class="animated bounceOut"
           >
-    <button class="btn cancel" @click="exit">
+    <button @click="exit">
       <i class="fa fa-times"></i>
     </button>
   </transition>
@@ -12,6 +12,8 @@
 export default {
   methods: {
     exit() {
+      this.$store.commit('setExitNeeded')
+      this.$store.commit('changeActiveHouse', null)
       this.$router.push('/')
     }
   }

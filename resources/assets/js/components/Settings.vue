@@ -6,7 +6,9 @@
 
 <script>
 export default {
-  props: ['houseOrStudentActive']
+  mounted() {
+    this.$store.commit('setExitNeeded')
+  }
 }
 </script>
 
