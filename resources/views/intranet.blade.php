@@ -28,8 +28,8 @@
 							<exit-button></exit-button>
 						</span>
 						<span v-else>
-							<router-link to="/settings" :test="houseOrStudentActive">
-								<button class="btn cancel">
+							<router-link to="/settings">
+								<button>
 									<i class="fa fa-cogs"></i>
 								</button>
 							</router-link>

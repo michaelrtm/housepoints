@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<i class="fa fa-user"></i>
-		<input type="text" v-model="query" v-on:keyup="findStudents">
+		<input type="text" class="search-box" v-model="query" v-on:keyup="findStudents">
 
 		<ul class="student-list">
 			<li class="student" v-for="student in queryList" v-bind:class="student.color" @click="setActiveHouse(student.house_id)">
@@ -15,7 +15,7 @@
 	export default {
 
 		mounted() {
-			//this.getStudents()
+			this.$store.commit('setExitNeeded')
 		},
 
 		data() {
