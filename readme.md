@@ -4,13 +4,28 @@ Developed as an example app for my students, to show how a simple web app could 
 
 ## Todo ##
 
+### TODO ###
 
-* Auth
-* Admin interface to mangage houses / colours
-* Clean up student search (ajax request after search params at least 3 chars)?
-* Mobile view
-* House histories?
-* Captains
+# General #
+
+ - [ ] Auth
+ - [x] Load student search through API
+ - [ ] Paginate student search
+ - [x] Filter Find Students
+ - [x] Add scores to houses
+ - [x] Adding new score watcher on chart
+ - [x] Show Exit button when Needed
+ - [x] Setting active house from searching student
+ - [x] Year / Week view toggle
+ - [ ] Ditch bootstrap, try out Bulma or UIKit
+ - [ ] Mobile Friendly
+
+# Admin #
+
+ - [ ] Manual score entry
+ - [ ] Remove scores
+ - [ ] Admin Grades / Houses etc
+ - [ ] Excel sheet import / export for simple admin management
 
 ## Install ##
 ```
@@ -20,3 +35,4 @@ composer install
 php artisan migrate
 php artisan db:seed
 ```
+Please note: Database seeds with the colours/houses for the school I currently work at
