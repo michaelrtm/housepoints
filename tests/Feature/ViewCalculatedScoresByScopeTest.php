@@ -33,16 +33,9 @@ class ViewCalculatedScoresByScopeTest extends TestCase
         $response = $this->json('GET', '/api/calculate');
         
         $response->assertStatus(200);
-        // $response->assertJson([
-        //     'score' => 12
-        // ]);
-        
-        // TODO: This is gross - how does one test json
-        // wrapped in 'data' => [{ json }]?
-        $parsedData = json_decode($response->getContent());
-        $yuck = $parsedData->data;
-
-        $this->assertEquals(12, $yuck[0]->score);
+        $response->assertJsonFragment([
+            'score' => 12
+        ]);
     }
 
 /** @test */
@@ -65,11 +58,9 @@ class ViewCalculatedScoresByScopeTest extends TestCase
         $response = $this->json('GET', '/api/calculate?scope=lastweek');
     
         $response->assertStatus(200);
-
-        // see previous test
-        $parsedData = json_decode($response->getContent());
-        $yuck = $parsedData->data;
-        $this->assertEquals(15, $yuck[0]->score);        
+        $response->assertJsonFragment([
+            'score' => 15
+        ]);    
     }
 
     /** @test */
@@ -92,10 +83,8 @@ class ViewCalculatedScoresByScopeTest extends TestCase
         $response = $this->json('GET', '/api/calculate?scope=year');
     
         $response->assertStatus(200);
-
-        // see previous test
-        $parsedData = json_decode($response->getContent());
-        $yuck = $parsedData->data;
-        $this->assertEquals(47, $yuck[0]->score);        
+        $response->assertJsonFragment([
+            'score' => 47
+        ]);      
     }
 }

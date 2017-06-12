@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<i class="fa fa-user"></i>
-		<input type="text" v-model="query">
+		<input type="text" v-model="query" v-on:keyup="findStudents">
 
 		<ul class="student-list">
 			<li class="student" v-for="student in queryList" v-bind:class="student.color" @click="setActiveHouse(student.house_id)">
@@ -15,7 +15,7 @@
 	export default {
 
 		mounted() {
-			this.getStudents()
+			//this.getStudents()
 		},
 
 		data() {
@@ -35,8 +35,8 @@
 		},
 
 		methods: {
-			getStudents() {
-				axios.get('/api/students')
+			findStudents() {
+				axios.post('/api/students/search', {'query': this.query})
 					.then((response) => {
 						this.students = response.data.data
 					})
