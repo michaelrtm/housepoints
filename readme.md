@@ -4,9 +4,7 @@ Developed as an example app for my students, to show how a simple web app could 
 
 ## Todo ##
 
-### TODO ###
-
-# General #
+#### General ####
 
  - [ ] Auth
  - [x] Load student search through API
@@ -20,7 +18,7 @@ Developed as an example app for my students, to show how a simple web app could 
  - [ ] Ditch bootstrap, try out Bulma or UIKit
  - [ ] Mobile Friendly
 
-# Admin #
+#### Admin ####
 
  - [ ] Manual score entry
  - [ ] Remove scores
@@ -35,4 +33,4 @@ composer install
 php artisan migrate
 php artisan db:seed
 ```
-Please note: Database seeds with the colours/houses for the school I currently work at
+*Please note: Database seeds with the colours/houses for the school I currently work at*
