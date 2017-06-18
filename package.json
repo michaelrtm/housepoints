@@ -21,6 +21,7 @@
     "vue-chart": "^2.0.0",
     "vue-chartjs": "^2.5.1",
     "vue-charts": "^0.2.1",
+    "vue-color": "^2.2.0",
     "vue-echarts-v3": "^1.0.3",
     "vue-router": "^2.5.3",
     "vue2-animate": "^1.0.4",

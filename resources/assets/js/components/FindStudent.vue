@@ -4,7 +4,7 @@
 		<input type="text" class="search-box" v-model="query" v-on:keyup="findStudents">
 
 		<ul class="student-list">
-			<li class="student" v-for="student in queryList" v-bind:class="student.color" @click="setActiveHouse(student.house_id)">
+			<li class="student" v-for="student in students" v-bind:class="student.color" @click="setActiveHouse(student.house_id)">
 				 {{student.name}} ( {{student.grade}} )
 			</li>
 		</ul>
@@ -23,15 +23,6 @@
 				students: [],
 				query: ""
 			};
-		},
-
-		computed: {
-			queryList: function () {
-		      var vm = this
-		      return this.students.filter(function (item) {
-		        return item.name.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1
-		      })
-		    }
 		},
 
 		methods: {

@@ -138,3 +138,11 @@ html, body {
 .search-box {
 	flex: 5 0 calc(100% - 10px);
 }
+.house {
+	.panel-heading { 
+		border-top:8px solid;
+	}
+	textarea {
+		resize: none;
+	}
+}

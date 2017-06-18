@@ -15,7 +15,7 @@
 						v-if="!activeHouse"
 						@click="setActiveHouse(house)"
 						key="house.name"
-						v-bind:class="house.color"
+						:style="{ 'background-color': house.hex }"
 						>
 					{{ house.name }}
 				</button>
