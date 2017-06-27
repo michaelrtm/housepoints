@@ -1,6 +1,6 @@
 <template>
   <div>
-    <manage-houses></manage-houses>
+    test
   </div>
 </template>
 

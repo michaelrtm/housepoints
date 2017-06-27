@@ -3,15 +3,15 @@ module.exports = {
     exitNeeded: false,
     activeHouse: null,
     findStudent: null,
-    students: null,
+    students: {},
     houses: {},
-    scores: null,
+    scores: {},
   },
   mutations: {
     setHouses (state, houses) {
       state.houses = houses
     },
-    setExitNeeded (state) {
+    toggleExitNeeded (state) {
       state.exitNeeded = !state.exitNeeded
     },
     changeActiveHouse (state, house) {
