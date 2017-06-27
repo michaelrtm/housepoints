@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 
-Route::group(['middleware' => 'api'], function(){
+Route::group(['middleware' => 'auth:api'], function(){
     Route::post('/houses', 'HouseController@store');
     Route::put('/houses/{id}', 'HouseController@update');
     Route::delete('/houses/{id}', 'HouseController@delete');

@@ -18,8 +18,7 @@ class HouseTransformer extends TransformerAbstract
             'id'      => (int) $house->id,
             'name'    => $house->name,
             'color'   => $house->color,
-            'blurb'   => $house->blurb,
-            'hex'     => $house->hex
+            'blurb'   => $house->blurb
         ];
     }
 }
